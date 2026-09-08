@@ -1,0 +1,26 @@
+# --- Web Framework ---
+fastapi==0.115.12            # async web framework
+uvicorn[standard]==0.34.3    # ASGI server to run FastAPI
+
+# --- Database ---
+sqlalchemy==2.0.41           # ORM for database models and queries
+asyncpg==0.30.0              # async PostgreSQL driver (used by SQLAlchemy)
+alembic==1.16.1              # database migration tool
+
+# --- Data Validation ---
+pydantic==2.11.4             # request/response schemas (built into FastAPI)
+pydantic-settings==2.9.1     # load config from .env files
+
+# --- Security ---
+passlib[bcrypt]==1.7.4       # password hashing
+python-jose[cryptography]==3.4.0  # JWT token creation and verification
+python-multipart==0.0.20     # form data parsing (login forms, file uploads)
+
+# --- Utilities ---
+httpx==0.28.1                # async HTTP client (for tests and external API calls)
+python-dotenv==1.1.0         # read .env files into environment variables
+
+# --- Testing ---
+pytest==8.4.0                # test runner
+pytest-asyncio==1.0.0        # async test support
+
