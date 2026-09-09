@@ -2,3 +2,5 @@
 *pycache
 *.venv
 *.env
+ShareBridge_Setup_Report.pdf
+generate_report.py
