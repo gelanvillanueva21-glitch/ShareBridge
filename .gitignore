@@ -3,4 +3,5 @@
 *.venv
 *.env
 ShareBridge_Setup_Report.pdf
+ShareBridge_Models_Report.pdf
 generate_report.py
