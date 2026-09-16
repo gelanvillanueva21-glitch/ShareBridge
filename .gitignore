@@ -1,7 +1,9 @@
 *node_modules
 *pycache
+*__pycache__
 *.venv
 *.env
 ShareBridge_Setup_Report.pdf
 ShareBridge_Models_Report.pdf
+ShareBridge_Schemas_Report.pdf
 generate_report.py
