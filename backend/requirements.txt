@@ -10,6 +10,7 @@ alembic==1.16.1              # database migration tool
 # --- Data Validation ---
 pydantic==2.11.4             # request/response schemas (built into FastAPI)
 pydantic-settings==2.9.1     # load config from .env files
+pydantic[email]
 
 # --- Security ---
 bcrypt==4.3.0                # password hashing (direct, actively maintained)

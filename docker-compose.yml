@@ -21,6 +21,8 @@ services:
       - "8000:8000"
     env_file:
       - ./backend/.env
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:password@db:5432/sharebridge
     volumes:
       - ./backend:/app
     depends_on:
