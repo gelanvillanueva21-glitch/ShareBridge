@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routers import users
+from app.routers.users import router as user_router
+from app.routers.profile import router as profile_router
+
 
 app = FastAPI(
     title="ShareBridge API",
@@ -25,7 +27,8 @@ app.add_middleware(
 # ---------------------------------------------------------------------------
 # Routers
 # ---------------------------------------------------------------------------
-app.include_router(users.router, prefix="/api")
+app.include_router(user_router, prefix="/api")
+app.include_router(profile_router, prefix="/api")
 
 
 @app.get("/")

@@ -132,5 +132,64 @@ from app.services.profile import ProfileService
 The goal is to make large files easy to scan and maintain. Readability is preferred over minimizing vertical space.
 
 
-- Addition: Use Typealias whenever using Annotated.
+
+
+<!-- Additions -->
+
+- Use Typealias whenever using Annotated.
+
+
+
+
+<!-- Function Parameter Formatting Rules -->
+
+* If a function, method, class constructor, dependency, or function call contains more than 2 parameters, place each parameter on its own line.
+* Do not keep long parameter lists on a single line.
+* Always include a trailing comma on the last parameter when using multi-line formatting.
+* Apply this rule consistently to:
+
+  * Function definitions
+  * Class constructors
+  * Function calls
+  * Dependency declarations
+  * Object creation
+  * SQLAlchemy queries when appropriate
+
+Bad:
+
+```python
+async def create_profile(current_user: User, profile_service: ProfileService, profile_data: ProfileCreateSchema):
+```
+
+Good:
+
+```python
+async def create_profile(
+    current_user: User,
+    profile_service: ProfileService,
+    profile_data: ProfileCreateSchema,
+):
+```
+
+Bad:
+
+```python
+profile = Profile(first_name=data.first_name, last_name=data.last_name, user_id=current_user.id)
+```
+
+Good:
+
+```python
+profile = Profile(
+    first_name=data.first_name,
+    last_name=data.last_name,
+    user_id=current_user.id,
+)
+```
+
+Goal:
+
+* Optimize readability over compactness.
+* Make parameter additions and Git diffs cleaner.
+* Keep function signatures easy to scan in large codebases.
 

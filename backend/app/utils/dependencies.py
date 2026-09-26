@@ -4,44 +4,39 @@ Provides:
 * `DbSession` – async DB session (from utils.db_session).
 * Auth helpers (`get_current_user`, `get_current_admin`).
 * Annotated shortcuts for repositories and services – imported from the
-dedicated `utils.repositories` and `utils.services` modules.
+  dedicated `utils.repositories` and `utils.services` modules.
 """
 
 from typing import Annotated, TypeAlias
 
 from fastapi import Depends, HTTPException, Request, status
 from jose import JWTError
-from .repositories import get_profile_repository, get_user_repository
 
+from .db_session import DbSession
+from .repositories import get_profile_repository, get_user_repository
 
 from app.models.user import User, UserRole
 from app.repositories.user_repository import UserRepository
 from app.repositories.profile_repository import ProfileRepository
 from app.utils.security import decode_token
 
-
 from .services import get_profile_service, get_user_service
 from app.services.user_service import UserService
 from app.services.profile_service import ProfileService
 
-
 # Service Dependencies Reusable Variable
-
 
 UserServiceDep: TypeAlias = Annotated[UserService, Depends(get_user_service)]
 ProfileServiceDep: TypeAlias = Annotated[ProfileService, Depends(get_profile_service)]
-
-
 
 # Repository Dependencies Reusable Variable
 
 UserRepo: TypeAlias = Annotated[UserRepository, Depends(get_user_repository)]
 ProfileRepo: TypeAlias = Annotated[ProfileRepository, Depends(get_profile_repository)]
 
-
-
 # Authentication Guard whenver the user fetching data
 # Checking aswell if jwt is exist in the cookie
+
 
 
 async def get_current_user(
@@ -74,6 +69,7 @@ async def get_current_user(
     return user
 
 
+
 # Dependencies for getting the currentuser data
 CurrentUser: TypeAlias = Annotated[User, Depends(get_current_user)]
 
@@ -89,6 +85,7 @@ async def get_current_admin(
             detail="Admin access required.",
         )
     return current_user
+
 
 
 # Dependencies for getting the current admin data
