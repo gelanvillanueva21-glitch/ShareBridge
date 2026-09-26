@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, status, Response, Cookie
 from typing import Optional
 from jose import JWTError
 
-from app.utils.dependencies import UserServiceDep, CurrentUser, UserRepo
+from app.utils.dependencies import CurrentUser, UserRepo, UserServiceDep
 from app.utils.security import create_access_token, create_refresh_token, decode_token
 from app.schemas.user import UserCreate, UserRead, TokenResponse, LoginRequest
 from app.exceptions import AlreadyExistsError, InvalidCredentialsError, NotFoundError
