@@ -1,10 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.user import User
+from app.models.user import User, UserRole
 from app.repositories.user_repository import UserRepository
 from app.schemas.user import UserCreate
 from app.utils.security import hash_password, verify_password
-from app.exceptions import AlreadyExistsError, InvalidCredentialsError
+from app.exceptions import AlreadyExistsError, InvalidCredentialsError, PermissionDeniedError
 
 
 class UserService:
@@ -33,6 +33,9 @@ class UserService:
         existing = await self.repo.get_by_email(user_in.email)
         if existing:
             raise AlreadyExistsError("An account with this email already exists.")
+
+        if user_in.role == UserRole.ADMIN:
+            raise PermissionDeniedError("Cannot create an account role admin!")
 
         hashed = hash_password(user_in.password)
 
