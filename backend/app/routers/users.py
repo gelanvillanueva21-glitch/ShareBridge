@@ -5,7 +5,7 @@ from jose import JWTError
 from app.utils.dependencies import CurrentUser, UserRepo, UserServiceDep
 from app.utils.security import create_access_token, create_refresh_token, decode_token
 from app.schemas.user import UserCreate, UserRead, TokenResponse, LoginRequest
-from app.exceptions import AlreadyExistsError, InvalidCredentialsError, NotFoundError
+from app.exceptions import AlreadyExistsError, InvalidCredentialsError, NotFoundError, PermissionDeniedError
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -23,8 +23,16 @@ async def register(
     try:
         user = await service.register(user_in)
         return user
+    except PermissionDeniedError as e:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail=str(e.message)
+            )
     except AlreadyExistsError as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=e.message)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, 
+            detail=e.message
+        )
 
 
 @router.post("/login", response_model=TokenResponse)
@@ -40,23 +48,14 @@ async def login(
     - Refresh Token as an HttpOnly cookie (browser stores it, JS cannot read it).
     """
     try:
-        user = await service.authenticate(credentials.email, credentials.password)
+        token = await service.authenticate(
+            credentials.email, 
+            credentials.password,
+            response
+        )
+        return token
     except InvalidCredentialsError as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=e.message)
-
-    access_token = create_access_token(data={"sub": str(user.id)})
-    refresh_token = create_refresh_token(data={"sub": str(user.id)})
-
-    response.set_cookie(
-        key="refresh_token",
-        value=refresh_token,
-        httponly=True,              # JS cannot read this — blocks XSS attacks
-        secure=True,                # Only sent over HTTPS in production
-        samesite="lax",             # Blocks CSRF from other origins
-        max_age=7 * 24 * 60 * 60,  # 7 days in seconds
-    )
-
-    return TokenResponse(access_token=access_token, user=UserRead.model_validate(user))
 
 
 @router.post("/refresh", response_model=TokenResponse)

@@ -24,11 +24,27 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ---------------------------------------------------------------------------
-# Routers
-# ---------------------------------------------------------------------------
+# Routers connect to the main API
 app.include_router(user_router, prefix="/api")
-app.include_router(profile_router, prefix="/api")
+app.include_router(profile_router, prefix="/profle")
+
+
+
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
+
+# Base data directory (absolute path)
+BASE_DATA_DIR = Path(__file__).resolve().parents[2] / "Data"
+
+# Ensure subfolders exist
+for sub in ("profile_pictures", "sent_pictures", "posted_pictures"):
+    (BASE_DATA_DIR / sub).mkdir(parents=True, exist_ok=True)
+
+# Serve static files
+app.mount("/avatars", StaticFiles(directory=str(BASE_DATA_DIR / "profile_pictures")), name="avatars")
+app.mount("/sent", StaticFiles(directory=str(BASE_DATA_DIR / "sent_pictures")), name="sent")
+app.mount("/posted", StaticFiles(directory=str(BASE_DATA_DIR / "posted_pictures")), name="posted")
+
 
 
 @app.get("/")

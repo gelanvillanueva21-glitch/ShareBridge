@@ -12,7 +12,6 @@ from typing import Annotated, TypeAlias
 from fastapi import Depends, HTTPException, Request, status
 from jose import JWTError
 
-from .db_session import DbSession
 from .repositories import get_profile_repository, get_user_repository
 
 from app.models.user import User, UserRole

@@ -25,3 +25,4 @@ python-dotenv==1.1.0         # read .env files into environment variables
 pytest==8.4.0                # test runner
 pytest-asyncio==1.0.0        # async test support
 
+aiofiles

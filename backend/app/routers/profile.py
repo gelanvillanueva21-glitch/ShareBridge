@@ -11,7 +11,7 @@ from fastapi import APIRouter, HTTPException, status, UploadFile, File
 
 from app.utils.dependencies import CurrentUser, ProfileServiceDep
 from app.schemas.profile import ProfileRead, ProfileUpdate
-from app.exceptions import NotFoundError, PermissionDeniedError
+
 
 router = APIRouter(prefix="/profile", tags=["Profile"])
 
@@ -24,10 +24,6 @@ async def read_my_profile(
     """Return the current user's profile (creates a default one if missing)."""
     try:
         return await service.get_my_profile(current_user)
-    except NotFoundError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=e.message)
-    except PermissionDeniedError as e:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=e.message)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -44,10 +40,6 @@ async def update_my_profile(
     """Partially update the current user's profile fields."""
     try:
         return await service.update_my_profile(payload, current_user)
-    except NotFoundError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=e.message)
-    except PermissionDeniedError as e:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=e.message)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -64,10 +56,6 @@ async def upload_profile_photo(
     """Upload a new profile picture and attach it to the user's profile."""
     try:
         return await service.upload_profile_photo(file, current_user)
-    except NotFoundError as e:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=e.message)
-    except PermissionDeniedError as e:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=e.message)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,

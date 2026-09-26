@@ -35,6 +35,7 @@ class ProfileRepository:
         return profile
 
 
-    async def set_photo(session: AsyncSession, profile: Profile, photo: Photo) -> Profile:
+    async def set_photo(self, profile: Profile, photo: Photo) -> Profile:
+        """Link a Photo to the Profile as the profile picture."""
         profile.profile_photo_id = photo.id
-        return await ProfileRepository.update(session, profile)
+        return await self.update(profile)
