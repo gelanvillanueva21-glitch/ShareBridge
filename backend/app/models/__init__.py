@@ -4,3 +4,5 @@ from .donation import Donation, DonationCategory, UrgencyLevel, ItemCondition
 from .claim import Claim, ClaimStatus
 from .message import Message
 from .photo import Photo, PhotoPurpose
+from .profile import Profile
+from .rating import DonorRating, VolunteerRating

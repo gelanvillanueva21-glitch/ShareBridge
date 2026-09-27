@@ -15,7 +15,8 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 # Import our settings and Base metadata
 from app.config import settings
 from app.database import Base
-from app.models import *  # Import all models so Alembic can see them!
+
+from app.models import *
 
 config = context.config
 

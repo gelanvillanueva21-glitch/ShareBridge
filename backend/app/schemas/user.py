@@ -6,7 +6,7 @@ from app.models.user import UserRole
 
 class UserBase(BaseModel):
     email: EmailStr
-    display_name: Optional[str] = None
+    full_name: Optional[str] = None
     role: UserRole = UserRole.DONOR
 
 
@@ -23,7 +23,6 @@ class UserRead(UserBase):
     id: int
     is_verified: bool
     created_at: datetime
-    updated_at: Optional[datetime] = None
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -40,7 +39,6 @@ class TokenResponse(BaseModel):
     """
     access_token: str
     token_type: str = "bearer"
-    user: UserRead
 
 
 class LoginRequest(BaseModel):

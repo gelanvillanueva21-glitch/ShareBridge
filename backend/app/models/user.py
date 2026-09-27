@@ -27,6 +27,7 @@ class User(Base):
     
     # Full name of the user (editable)
     full_name: Mapped[str | None] = mapped_column(String, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     
     role: Mapped[UserRole] = mapped_column(Enum(UserRole), nullable=False, default=UserRole.DONOR)
     

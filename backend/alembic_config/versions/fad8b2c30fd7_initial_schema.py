@@ -25,7 +25,7 @@ def upgrade() -> None:
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('email', sa.String(), nullable=False),
     sa.Column('hashed_password', sa.String(), nullable=False),
-    sa.Column('display_name', sa.String(), nullable=True),
+    sa.Column('full_name', sa.String(), nullable=True),
     sa.Column('role', sa.Enum('DONOR', 'VOLUNTEER', 'ADMIN', name='userrole'), nullable=False),
     sa.Column('is_verified', sa.Boolean(), nullable=False),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),

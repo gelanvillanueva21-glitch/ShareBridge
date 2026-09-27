@@ -4,6 +4,9 @@ from app.models.user import User, UserRole
 from app.repositories.user_repository import UserRepository
 from app.schemas.user import UserCreate
 from app.utils.security import hash_password, verify_password
+from app.repositories.profile_repository import ProfileRepository
+
+
 from fastapi import Response
 from app.utils.security import create_access_token, create_refresh_token
 from app.schemas.user import TokenResponse, UserRead
@@ -42,12 +45,17 @@ class UserService:
 
         hashed = hash_password(user_in.password)
 
-        return await self.repo.create(
+        result = await self.repo.create(
             email=user_in.email,
             hashed_password=hashed,
-            display_name=user_in.display_name,
+            full_name=user_in.full_name,
             role=user_in.role,
         )
+
+        # Instantly create profile after successfully create account
+        ProfileRepository(self.db).create(result.id, result.full_name)
+        return result
+
 
     async def authenticate(
         self, 
@@ -61,12 +69,8 @@ class UserService:
         so attackers cannot tell if the email exists or not.
         """
         user = await self.repo.get_by_email(email)
-
         if not user or not verify_password(password, user.hashed_password):
             raise InvalidCredentialsError("Incorrect email or password.")
-
-        # Verify credentials
-        user = await self.authenticate(email, password)
 
 
         # Create JWTs
@@ -79,11 +83,11 @@ class UserService:
             key="refresh_token",
             value=refresh_token,
             httponly=True,
-            secure=True,
+            secure=False,
             samesite="lax",
             max_age=7 * 24 * 60 * 60,
         )
-        return TokenResponse(access_token=access_token, user=UserRead.model_validate(user))
+        return TokenResponse(access_token=access_token, )
 
 
     async def get_by_id(self, user_id: int) -> User:

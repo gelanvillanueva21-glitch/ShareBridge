@@ -32,7 +32,7 @@ class PhotoRepository:
 
         photo = Photo(
             uploader_id=uploader_id,
-            file_path=file_url,  # only the filename, as required
+            file_path=file_url,
             purpose=PhotoPurpose.PROFILE,
             reference_id=uploader_id,
         )

@@ -31,8 +31,8 @@ class UserRepository:
         self,
         email: str,
         hashed_password: str,
-        display_name: str | None,
-        role,
+        full_name: str | None,
+        role: str,
     ) -> User:
         """
         Inserts a new User row into the database.
@@ -41,7 +41,7 @@ class UserRepository:
         new_user = User(
             email=email,
             hashed_password=hashed_password,
-            display_name=display_name,
+            full_name=full_name,
             role=role,
         )
         self.db.add(new_user)
@@ -49,7 +49,11 @@ class UserRepository:
         await self.db.refresh(new_user)
         return new_user
 
-    async def update_verified(self, user: User, is_verified: bool) -> User:
+    async def update_verified(
+        self, 
+        user: User, 
+        is_verified: bool
+    ) -> User:
         """Sets the is_verified flag on a user. Used by admins."""
         user.is_verified = is_verified
         await self.db.commit()

@@ -31,7 +31,7 @@ def get_user_service(
 
 def get_profile_service(
         db: DatabaseDepends, 
-        repo: Annotated[ProfileService, Depends(
+        repo: Annotated[ProfileRepository, Depends(
             get_profile_repository
         )]
     ) -> ProfileService:

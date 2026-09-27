@@ -56,6 +56,11 @@ async def login(
         return token
     except InvalidCredentialsError as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=e.message)
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
+            detail="Unexpected error"
+        )
 
 
 @router.post("/refresh", response_model=TokenResponse)
@@ -92,10 +97,7 @@ async def refresh(
         raise session_expired
 
     new_access_token = create_access_token(data={"sub": str(user.id)})
-    return TokenResponse(
-        access_token=new_access_token,
-        user=UserRead.model_validate(user),
-    )
+    return TokenResponse(access_token=new_access_token,)
 
 
 @router.post("/logout")

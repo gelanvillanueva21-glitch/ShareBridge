@@ -40,7 +40,7 @@ ProfileRepo: TypeAlias = Annotated[ProfileRepository, Depends(get_profile_reposi
 
 async def get_current_user(
     request: Request,
-    repo: Annotated[UserRepository, Depends(UserRepo)],
+    repo: Annotated[UserRepository, Depends(get_user_repository)],
 ) -> User:
     """Validate the JWT access token and fetch the corresponding User.
     Directly uses the repository to avoid an extra service layer.

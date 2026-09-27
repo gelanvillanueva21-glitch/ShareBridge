@@ -4,9 +4,8 @@ This model holds personal details that a user can edit: full name, bio, city, a 
 It has a one‑to‑one relationship with `User` (user_id is unique) and an optional FK to a `Photo` where purpose = PROFILE.
 """
 
-import enum
 from datetime import datetime
-from sqlalchemy import String, Float, Integer, ForeignKey, DateTime
+from sqlalchemy import String, Float, ForeignKey, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from app.database import Base
@@ -17,9 +16,9 @@ class Profile(Base):
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), unique=True, nullable=False)
 
-    display_name: Mapped[str | None] = mapped_column(String, nullable=True)
-    bio: Mapped[str | None] = mapped_column(String, nullable=True)
-    city: Mapped[str | None] = mapped_column(String, nullable=True)
+    display_name: Mapped[str | None] = mapped_column(String, nullable=True, index=True)
+    bio: Mapped[str | None] = mapped_column(String, nullable=True, index=True)
+    city: Mapped[str | None] = mapped_column(String, nullable=True, index=True)
     goal: Mapped[float | None] = mapped_column(Float, nullable=True)
 
     # Optional link to a profile picture stored in the Photo table.

@@ -26,7 +26,7 @@ app.add_middleware(
 
 # Routers connect to the main API
 app.include_router(user_router, prefix="/api")
-app.include_router(profile_router, prefix="/profle")
+app.include_router(profile_router, prefix="/api")
 
 
 
