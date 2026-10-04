@@ -6,11 +6,11 @@ from sqlalchemy.sql import func
 from app.database import Base
 
 class PhotoPurpose(str, enum.Enum):
-    PROFILE = "profile"                 # Donator/Volunteer profile picture
-    DONATION_POST = "donation_post"     # Picture of the goods being donated (Public)
-    DELIVERY_PROOF = "delivery_proof"   # Social media post of successful handoff (Public)
-    PRIVATE_MESSAGE = "private_message" # Private proof sent in PM (Private)
-    ID_VERIFICATION = "id_verification" # Volunteer ID proof for admins (Strictly Private)
+    PROFILE = "profile"
+    DONATION_POST = "donation_post"
+    DELIVERY_PROOF = "delivery_proof"
+    PRIVATE_MESSAGE = "private_message"
+    ID_VERIFICATION = "id_verification"
 
 class Photo(Base):
     """

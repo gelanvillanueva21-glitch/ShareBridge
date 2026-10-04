@@ -40,3 +40,7 @@ class InvalidTokenError(AppError):
     """Raised when a JWT token is missing, expired, or tampered with."""
     pass
 
+
+class InvalidImageError(AppError):
+    """Raised when an uploaded file is not a valid image (jpeg, jpg, png, gif)."""
+    pass

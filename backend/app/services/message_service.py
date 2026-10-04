@@ -95,12 +95,7 @@ class MessageService:
             donation_id=donation_id,
         )
 
-        return MessageRead(
-            id=msg.id,
-            sender_id=msg.sender_id,
-            is_read=msg.is_read,
-            created_at=msg.created_at,
-        )
+        return MessageRead.model_validate(msg)
 
 
     async def get_conversation(
@@ -122,28 +117,14 @@ class MessageService:
             offset=0,
             last_message_id=last_message_id,
         )
-        return [
-            MessageRead(
-                id=m.id,
-                sender_id=m.sender_id,
-                is_read=m.is_read,
-                created_at=m.created_at,
-            ) for m in msgs
-        ]
+        return [MessageRead.model_validate(m) for m in msgs]
 
 
     async def get_unread(self, user_id: int) -> List[MessageRead]:
         """Return all unread messages for a given user."""
         await self._ensure_user_exists(user_id)
         msgs = await self.msg_repo.get_unread_by_user(user_id)
-        return [
-            MessageRead(
-                id=m.id,
-                sender_id=m.sender_id,
-                is_read=m.is_read,
-                created_at=m.created_at,
-            ) for m in msgs
-        ]
+        return [MessageRead.model_validate(m) for m in msgs]
 
 
     async def mark_as_read(self, message_id: int, user_id: int) -> None:
@@ -177,5 +158,5 @@ class MessageService:
         if not msg:
             raise NotFoundError(f"Message with id {message_id} not found")
         if msg.sender_id != requester_id and account.role != UserRole.ADMIN:
-            raise PermissionDeniedError("Only the sender can delete a message")
+            raise PermissionDeniedError("Only the sender or an admin can delete a message")
         await self.msg_repo.delete(message_id)
