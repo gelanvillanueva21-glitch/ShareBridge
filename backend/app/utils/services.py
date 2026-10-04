@@ -11,10 +11,13 @@ from fastapi import Depends
 from .db_session import DatabaseDepends
 from app.repositories.user_repository import UserRepository
 from app.repositories.profile_repository import ProfileRepository
-from .repositories import get_user_repository, get_profile_repository
+from app.repositories.photo_repository import PhotoRepository
+from app.repositories.message_repository import MessageRepository
+from .repositories import get_user_repository, get_profile_repository, get_message_repository, get_photo_repository
 
 
 # Import service classes
+from app.services.message_service import MessageService
 from app.services.user_service import UserService
 from app.services.profile_service import ProfileService
 
@@ -37,5 +40,14 @@ def get_profile_service(
     ) -> ProfileService:
     """Create a `ProfileService` bound to the current DB session and repository."""
     return ProfileService(db, repo)
+
+
+def get_message_service(
+    msg_repo: Annotated[MessageRepository, Depends(get_message_repository)],
+    user_repo: Annotated[UserRepository, Depends(get_user_repository)],
+    photo_repo: Annotated[PhotoRepository, Depends(get_photo_repository)],
+) -> MessageService:
+    """Create a `MessageService` bound to the current DB session and repositories."""
+    return MessageService(msg_repo, user_repo, photo_repo)
 
 

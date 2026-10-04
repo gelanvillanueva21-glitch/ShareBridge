@@ -5,11 +5,13 @@ The repository persists a :class:`Photo` record with the generated filename
 (and the appropriate purpose) and returns the ORM instance.
 """
 
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import UploadFile
 
-from app.utils.picture_utils import save_picture
+from app.utils.picture_utils import save_picture, remove_picture
 from app.models.photo import Photo, PhotoPurpose
+from app.exceptions import NotFoundError
 
 
 class PhotoRepository:
@@ -23,20 +25,35 @@ class PhotoRepository:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def create_profile_photo(self, uploader_id: int, file_url: str) -> Photo:
-        """Save the uploaded file and create a ``Photo`` entry for a profile picture.
 
-        Returns the newly persisted ``Photo`` ORM instance.
+    async def create_photo(
+        self, 
+        uploader_id: int, 
+        file_url: str, 
+        purpose: PhotoPurpose, 
+    ) -> Photo:
         """
-        # Store the file under the ``profile_pictures`` sub‑folder.
-
+        This function save a photo depending of the purpose
+        the database already handle the reference of what the photo is for, 
+        so we just need to pass the reference_id
+        """
         photo = Photo(
             uploader_id=uploader_id,
             file_path=file_url,
-            purpose=PhotoPurpose.PROFILE,
-            reference_id=uploader_id,
+            purpose=purpose
         )
         self.db.add(photo)
         await self.db.commit()
         await self.db.refresh(photo)
         return photo
+
+
+    async def get_by_id(self, photo_id: int) -> Photo  | None:
+        result = await self.db.execute(
+            select(
+                Photo
+            ).where(
+                Photo.id == photo_id
+            )
+        )
+        return result.scalar_one_or_none()

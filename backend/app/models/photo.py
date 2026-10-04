@@ -28,9 +28,5 @@ class Photo(Base):
     # Context of the photo
     purpose: Mapped[PhotoPurpose] = mapped_column(Enum(PhotoPurpose), nullable=False)
     
-    # Links to the specific feature (Donation.id, Message.id, Claim.id)
-    # If purpose == PROFILE or ID_VERIFICATION, this can be left null or point to the User.id
-    reference_id: Mapped[int | None] = mapped_column(Integer, nullable=True) 
-    
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 

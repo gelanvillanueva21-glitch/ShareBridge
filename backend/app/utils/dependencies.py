@@ -12,21 +12,24 @@ from typing import Annotated, TypeAlias
 from fastapi import Depends, HTTPException, Request, status
 from jose import JWTError
 
-from .repositories import get_profile_repository, get_user_repository
+from .repositories import get_profile_repository, get_user_repository, get_message_repository
 
 from app.models.user import User, UserRole
 from app.repositories.user_repository import UserRepository
 from app.repositories.profile_repository import ProfileRepository
+from app.repositories.message_repository import MessageRepository
 from app.utils.security import decode_token
 
-from .services import get_profile_service, get_user_service
+from .services import get_profile_service, get_user_service, get_message_service
 from app.services.user_service import UserService
 from app.services.profile_service import ProfileService
+from app.services.message_service import MessageService
 
 # Service Dependencies Reusable Variable
 
 UserServiceDep: TypeAlias = Annotated[UserService, Depends(get_user_service)]
 ProfileServiceDep: TypeAlias = Annotated[ProfileService, Depends(get_profile_service)]
+MessageServiceDep: TypeAlias = Annotated[MessageService, Depends(get_message_service)]
 
 # Repository Dependencies Reusable Variable
 

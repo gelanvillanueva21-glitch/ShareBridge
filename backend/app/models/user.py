@@ -5,7 +5,7 @@ from sqlalchemy import String, Enum, Boolean, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from app.database import Base
-from typing import List, Optional
+
 
 
 class UserRole(str, enum.Enum):

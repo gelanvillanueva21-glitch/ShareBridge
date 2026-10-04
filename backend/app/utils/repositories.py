@@ -12,6 +12,8 @@ from .db_session import DatabaseDepends
 # Import repository classes
 from app.repositories.user_repository import UserRepository
 from app.repositories.profile_repository import ProfileRepository
+from app.repositories.message_repository import MessageRepository
+from app.repositories.photo_repository import PhotoRepository
 # Add other repositories here as they appear in the project.
 
 
@@ -25,4 +27,13 @@ def get_profile_repository(db: DatabaseDepends) -> ProfileRepository:
     """Create a `ProfileRepository` bound to the current DB session."""
     return ProfileRepository(db)
 
+
+def get_message_repository(db: DatabaseDepends) -> MessageRepository:
+    """Create a `MessageRepository` bound to the current DB session."""
+    return MessageRepository(db)
+
+
+def get_photo_repository(db: DatabaseDepends) -> PhotoRepository:
+    """Create a `PhotoRepository` bound to the current DB session."""
+    return PhotoRepository(db)
 
