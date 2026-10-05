@@ -1,7 +1,10 @@
+
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from app.models.user import User
+
+from app.models.user import User, UserRole
 
 
 class UserRepository:
@@ -22,10 +25,20 @@ class UserRepository:
         result = await self.db.execute(select(User).where(User.id == user_id))
         return result.scalar_one_or_none()
 
+
     async def get_by_email(self, email: str) -> User | None:
         """Returns a User by their email address, or None if not found."""
         result = await self.db.execute(select(User).where(User.email == email))
         return result.scalar_one_or_none()
+
+
+    async def get_user_role(self, id: int) -> UserRole | None:
+        """
+        Returns the role of a user by their ID, or None if not found.
+        """
+        result = await self.get_by_id(id)
+        return result.role if result else None
+
 
     async def create(
         self,
@@ -48,6 +61,7 @@ class UserRepository:
         await self.db.commit()
         await self.db.refresh(new_user)
         return new_user
+
 
     async def update_verified(
         self, 

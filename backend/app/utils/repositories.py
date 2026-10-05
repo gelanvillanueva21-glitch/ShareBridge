@@ -14,6 +14,7 @@ from app.repositories.user_repository import UserRepository
 from app.repositories.profile_repository import ProfileRepository
 from app.repositories.message_repository import MessageRepository
 from app.repositories.photo_repository import PhotoRepository
+from app.repositories.volunteer_repository import VolunteerRepository
 # Add other repositories here as they appear in the project.
 
 
@@ -37,3 +38,8 @@ def get_photo_repository(db: DatabaseDepends) -> PhotoRepository:
     """Create a `PhotoRepository` bound to the current DB session."""
     return PhotoRepository(db)
 
+
+
+def get_volunteer_repository(db: DatabaseDepends) -> VolunteerRepository:
+    """Create a `VolunteerRepository` bound to the current DB session."""
+    return VolunteerRepository(db)

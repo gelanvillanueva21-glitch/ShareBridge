@@ -18,6 +18,7 @@ class ClaimRead(ClaimBase):
     volunteer_id: int
     status: ClaimStatus
     delivery_caption: Optional[str] = None
+    image_proof_url: Optional[str] = None
     created_at: datetime
     updated_at: Optional[datetime]
 

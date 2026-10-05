@@ -27,9 +27,15 @@ class UserService:
     The repository is the only thing that touches the database directly.
     """
 
-    def __init__(self, db: AsyncSession, repo: UserRepository):
+    def __init__(
+        self, 
+        db: AsyncSession, 
+        repo: UserRepository, 
+        prof_repo: ProfileRepository
+    ):
         self.db = db
         self.repo = repo
+        self.prof_repo = prof_repo  
 
     async def register(self, user_in: UserCreate) -> User:
         """
@@ -55,7 +61,10 @@ class UserService:
         )
 
         # Instantly create profile after successfully create account
-        await ProfileRepository(self.db).create(result.id, result.full_name)
+        await self.prof_repo.create(
+            user_id=result.id, 
+            full_name=result.full_name
+        )
         return result
 
 

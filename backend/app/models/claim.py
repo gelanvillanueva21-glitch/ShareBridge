@@ -1,6 +1,6 @@
 import enum
 from datetime import datetime
-from sqlalchemy import String, Enum, DateTime, ForeignKey
+from sqlalchemy import CheckConstraint, String, Enum, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
 from app.database import Base
@@ -16,6 +16,12 @@ class Claim(Base):
     Represents a volunteer claiming a donation to pick it up.
     """
     __tablename__ = "claims"
+    __table_args__ = (
+        CheckConstraint(
+            "image_proof_url IS NULL OR status = 'COMPLETED'",
+            name="ck_claims_image_proof_only_when_completed",
+        ),
+    )
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     donation_id: Mapped[int] = mapped_column(ForeignKey("donations.id"), nullable=False)
@@ -25,6 +31,7 @@ class Claim(Base):
     
     # Social media proof of delivery
     delivery_caption: Mapped[str | None] = mapped_column(String, nullable=True)
+    image_proof_url: Mapped[str | None] = mapped_column(String, nullable=True)
     
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), onupdate=func.now())

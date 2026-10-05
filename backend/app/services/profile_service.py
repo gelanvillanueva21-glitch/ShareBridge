@@ -5,13 +5,14 @@ The class is instantiated via a dependency defined in `app.utils.dependencies`.
 """
 
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import UploadFile
+
 
 from app.repositories.profile_repository import ProfileRepository
 from app.repositories.photo_repository import PhotoRepository
 from app.models.user import User
 from app.models.profile import Profile
 from app.schemas.profile import ProfileUpdate
-from fastapi import UploadFile
 from app.utils.image_helper import save_image
 
 

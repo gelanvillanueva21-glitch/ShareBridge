@@ -12,29 +12,48 @@ from typing import Annotated, TypeAlias
 from fastapi import Depends, HTTPException, Request, status
 from jose import JWTError
 
-from .repositories import get_profile_repository, get_user_repository, get_message_repository
+from .repositories import ( 
+    get_profile_repository, 
+    get_user_repository, 
+    get_message_repository,
+    get_photo_repository,
+    get_volunteer_repository
+)
 
 from app.models.user import User, UserRole
 from app.repositories.user_repository import UserRepository
 from app.repositories.profile_repository import ProfileRepository
 from app.repositories.message_repository import MessageRepository
+from app.repositories.photo_repository import PhotoRepository
+from app.repositories.volunteer_repository import VolunteerRepository
 from app.utils.security import decode_token
 
-from .services import get_profile_service, get_user_service, get_message_service
+from .services import (
+    get_profile_service,
+    get_user_service,
+    get_message_service,
+    get_claim_service,
+)
 from app.services.user_service import UserService
 from app.services.profile_service import ProfileService
 from app.services.message_service import MessageService
+from app.services.claim_service import ClaimService
 
 # Service Dependencies Reusable Variable
 
 UserServiceDep: TypeAlias = Annotated[UserService, Depends(get_user_service)]
 ProfileServiceDep: TypeAlias = Annotated[ProfileService, Depends(get_profile_service)]
 MessageServiceDep: TypeAlias = Annotated[MessageService, Depends(get_message_service)]
+ClaimServiceDep: TypeAlias = Annotated[ClaimService, Depends(get_claim_service)]
 
 # Repository Dependencies Reusable Variable
 
 UserRepo: TypeAlias = Annotated[UserRepository, Depends(get_user_repository)]
 ProfileRepo: TypeAlias = Annotated[ProfileRepository, Depends(get_profile_repository)]
+VolunteerRepo: TypeAlias = Annotated[VolunteerRepository, Depends(get_volunteer_repository)]
+PhotoRepo: TypeAlias = Annotated[PhotoRepository, Depends(get_photo_repository)]
+MessageRepo: TypeAlias = Annotated[MessageRepository, Depends(get_message_repository)]
+
 
 # Authentication Guard whenver the user fetching data
 # Checking aswell if jwt is exist in the cookie

@@ -11,8 +11,8 @@ from app.database import Base
 class UserRole(str, enum.Enum):
     DONOR = "donor"
     VOLUNTEER = "volunteer"
+    COMMUNITY = "community"
     ADMIN = "admin"
-    # Phase 2: COMMUNITY = "community" (for anonymous receivers)
 
 class User(Base):
     """

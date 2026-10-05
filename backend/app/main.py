@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.routers.users import router as user_router
 from app.routers.profile import router as profile_router
 from app.routers.messages import router as message_router
+from app.routers.claims import router as claim_router
 
 
 app = FastAPI(
@@ -29,6 +30,7 @@ app.add_middleware(
 app.include_router(user_router, prefix="/api")
 app.include_router(profile_router, prefix="/api")
 app.include_router(message_router, prefix="/api")
+app.include_router(claim_router, prefix="/api")
 
 
 

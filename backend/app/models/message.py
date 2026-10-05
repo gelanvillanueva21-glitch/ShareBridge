@@ -4,8 +4,6 @@ from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
 from app.database import Base
 
-from app.models.photo import Photo
-
 class Message(Base):
     """
     Represents a direct message (PM) between a Donor and a Volunteer.
@@ -32,6 +30,11 @@ class Message(Base):
         ForeignKey("donations.id"), 
         nullable=True
     )
+    claim_id: Mapped[int | None] = mapped_column(
+        ForeignKey("claims.id"),
+        nullable=True,
+        index=True,
+    )
     photo_id: Mapped[int | None] = mapped_column(
         ForeignKey("photos.id"), 
         nullable=True
@@ -40,4 +43,3 @@ class Message(Base):
     is_read: Mapped[bool] = mapped_column(Boolean, default=False)
     
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-
