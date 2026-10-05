@@ -12,8 +12,7 @@ from app.models.user import User
 from app.models.profile import Profile
 from app.schemas.profile import ProfileUpdate
 from fastapi import UploadFile
-
-from app.utils.picture_utils import save_picture
+from app.utils.image_helper import save_image
 
 
 class ProfileService:
@@ -55,7 +54,7 @@ class ProfileService:
         """Handle multipart upload, store the photo, and link it to the profile."""
         photo = await PhotoRepository(self.db).create_profile_photo(
             current_user.id,
-            save_picture(file),
+            await save_image(file),
         )
         profile = await self.repo.get_by_user_id(current_user.id)
         if not profile:
@@ -68,7 +67,6 @@ class ProfileService:
         self,
         query: str | None = None,
         city: str | None = None,
-        limit: int = 50,
     ) -> list[Profile]:
         """Search by a lightweight text term across name, city, and bio."""
         if query is not None:
@@ -82,5 +80,4 @@ class ProfileService:
         return await self.repo.search(
             query=query,
             city=city,
-            limit=limit,
         )

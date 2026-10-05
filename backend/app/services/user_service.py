@@ -55,7 +55,7 @@ class UserService:
         )
 
         # Instantly create profile after successfully create account
-        ProfileRepository(self.db).create(result.id, result.full_name)
+        await ProfileRepository(self.db).create(result.id, result.full_name)
         return result
 
 

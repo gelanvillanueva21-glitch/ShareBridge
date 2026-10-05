@@ -7,19 +7,16 @@ The repository persists a :class:`Photo` record with the generated filename
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import UploadFile
 
-from app.utils.picture_utils import save_picture, remove_picture
+
+from app.utils.image_helper import save_image
 from app.models.photo import Photo, PhotoPurpose
-from app.exceptions import NotFoundError
 
 
 class PhotoRepository:
-    """Repository handling creation of :class:`Photo` entries.
-
-    The repository is lightweight – it only needs the DB session to create the
-    ``Photo`` record. The actual file is saved by :func:`save_picture`, which
-    returns the generated filename (without any path prefix).
+    """
+        This PhotoRepository handles all the database
+        operation of the sending pictures by the users.
     """
 
     def __init__(self, db: AsyncSession):

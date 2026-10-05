@@ -5,7 +5,6 @@ from datetime import datetime
 class MessageBase(BaseModel):
     receiver_id: int = Field(gt=0)
     content: str | None = None
-    image_url: str | None = None
     emoji: str | None = None
     donation_id: int | None = Field(default=None, gt=0)
 
@@ -27,6 +26,7 @@ class MessageRead(BaseModel):
     content: str | None = None
     emoji: str | None = None
     photo_id: int | None = None
+    image_url: str | None = None
     donation_id: int | None = None
     is_read: bool
     created_at: datetime

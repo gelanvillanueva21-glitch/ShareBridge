@@ -46,9 +46,9 @@ class ProfileRepository:
 
     async def search(
         self,
+        limit: int = 50,
         query: str | None = None,
         city: str | None = None,
-        limit: int = 20,
     ) -> list[Profile]:
         """Search public profiles with a lightweight text query and optional city filter."""
         prof_search = select(Profile)
@@ -59,7 +59,6 @@ class ProfileRepository:
             filters.append(
                 or_(
                     Profile.display_name.ilike(term),
-                    Profile.city.ilike(term),
                     Profile.bio.ilike(term),
                 )
             )

@@ -1,10 +1,12 @@
 """HTTP endpoints for direct messages."""
 
-from fastapi import APIRouter, HTTPException, Query, Response, status
+from fastapi import APIRouter, HTTPException, Query, Response, status, UploadFile, File
+from typing import Annotated
 
 from app.exceptions import AppError, NotFoundError, PermissionDeniedError
 from app.schemas.message import MessageCreate, MessageRead
 from app.utils.dependencies import CurrentUser, MessageServiceDep
+from app.utils.image_helper import save_image
 
 router = APIRouter(prefix="/messages", tags=["Messages"])
 
@@ -25,9 +27,10 @@ def _http_exception(error: AppError) -> HTTPException:
     status_code=status.HTTP_201_CREATED,
 )
 async def send_message(
-    payload: MessageCreate,
     service: MessageServiceDep,
     current_user: CurrentUser,
+    payload: MessageCreate,
+    image: Annotated[UploadFile | None, File(description="Image file to upload")] = None,
 ) -> MessageRead:
     """Send a message to another user."""
     try:
@@ -35,7 +38,7 @@ async def send_message(
             sender_id=current_user.id,
             receiver_id=payload.receiver_id,
             content=payload.content,
-            image_url=payload.image_url,
+            image_url=await save_image(image) if image else None,
             emoji=payload.emoji,
             donation_id=payload.donation_id,
         )
